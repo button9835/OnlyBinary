@@ -97,17 +97,16 @@ def run_onlybinary(binary_code: str):
 
         ip += 1
         
-        if __name__ == "__main__":
-            import sys
-            if len(sys.argv) != 2:
-                print("Usage: python onlybinary.py <file.ob>")
-                exit(1)
-        
-            # 파일 내용 읽기 (공백, 줄바꿈 제거)
-            with open(sys.argv[1], "r") as f:
-                code = f.read().replace("\n", "").replace(" ", "")
-        
-            try:
-                run_onlybinary(code)
-            except ValueError as e:
-                print(f"Error: {e}")
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 2:
+        print("Usage: python onlybinary.py <file.ob>")
+        exit(1)
+
+    with open(sys.argv[1], "r") as f:
+        code = f.read().replace("\n", "").replace(" ", "")
+
+    try:
+        run_onlybinary(code)
+    except ValueError as e:
+        print(f"Error: {e}")
