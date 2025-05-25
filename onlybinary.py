@@ -1,4 +1,11 @@
 def run_onlybinary(binary_code: str):
+    for ch in binary_code:
+        if ch not in ('0', '1'):
+            raise ValueError(f"Invalid character '{ch}' in binary code. Only 0 and 1 are allowed.")
+    
+    if len(binary_code) % 8 != 0:
+        raise ValueError("Binary code length must be a multiple of 8.")
+    
     stack = []
     i = 0
     in_string = False
@@ -7,17 +14,15 @@ def run_onlybinary(binary_code: str):
     
     instructions = []
 
-    # 8비트씩 자르기
     while i + 8 <= len(binary_code):
         byte = binary_code[i:i+8]
         instructions.append(chr(int(byte, 2)))
         i += 8
 
-    ip = 0  # instruction pointer
+    ip = 0
     while ip < len(instructions):
         char = instructions[ip]
 
-        # 문자열 처리
         if char == '"':
             in_string = not in_string
             if not in_string:
@@ -27,7 +32,6 @@ def run_onlybinary(binary_code: str):
         elif in_string:
             string_buffer += char
 
-        # 명령어 처리
         elif char.isdigit():
             stack.append(int(char))
         elif char == '+':
@@ -92,3 +96,18 @@ def run_onlybinary(binary_code: str):
             pass
 
         ip += 1
+        
+        if __name__ == "__main__":
+            import sys
+            if len(sys.argv) != 2:
+                print("Usage: python onlybinary.py <file.ob>")
+                exit(1)
+        
+            # 파일 내용 읽기 (공백, 줄바꿈 제거)
+            with open(sys.argv[1], "r") as f:
+                code = f.read().replace("\n", "").replace(" ", "")
+        
+            try:
+                run_onlybinary(code)
+            except ValueError as e:
+                print(f"Error: {e}")
